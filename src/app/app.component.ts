@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { CustomTranslateService } from './services/custom-translate.service';
 import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule, IconDefinition } from '@fortawesome/angular-fontawesome';
 
 // En esta versión se importarán los iconos que necesite cada componente. De esta manera evitamos una sobrecarga innecesaria.
 import { faCoffee } from '@fortawesome/free-solid-svg-icons';
+import { environment } from '../environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -24,17 +25,22 @@ export class AppComponent {
   title = 'boeris-creaciones-frontend';
   faCoffee: IconDefinition = faCoffee;
   apiUrl?: string; // Ejemplo de uso de una variable de entorno
+  viewportHeight: number = 0;
 
   constructor(
-    private translateService: CustomTranslateService
+    // private translateService: CustomTranslateService
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.apiUrl = process.env['API_URL']; // Ejemplo de uso de variable de entorno
+    this.apiUrl = environment.API_URL;
   }
 
   // Uso de NgxTranslate en archivo TS
   async ngOnInit(): Promise<void> {
-    let translatedText: string | undefined;
-    translatedText = await this.translateService.getTranslation('TITLE');
-    console.log('Título pero con Translate: ', translatedText);
+    if (isPlatformBrowser(this.platformId)) {
+      if(typeof window !== "undefined") {
+        this.viewportHeight = window.innerHeight;
+        console.log(window.innerHeight);
+      }
+    }
   }
 }
