@@ -3,6 +3,9 @@
     <div class="login-container">
         <app-form
         (enterClicked)="login($event)"
+        [(loginLoading)]="isLoading"
         ></app-form>
     </div>
 </div>
+
+<p-toast></p-toast>

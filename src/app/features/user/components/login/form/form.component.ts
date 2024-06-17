@@ -34,9 +34,10 @@ import { LogIn } from '../../../../../core/models/login.entities';
   styleUrl: './form.component.scss'
 })
 export class FormComponent {
-  credentials: LogIn = {};
+  username?: string;
+  password?: string;
 
-  cargandoLogin: boolean = false;
+  loginLoading: ModelSignal<boolean> = model(false);
 
   enterClicked: OutputEmitterRef<LogIn> = output<LogIn>({});
 
@@ -53,18 +54,19 @@ export class FormComponent {
   }
 
   private emitToLogin(): void {
-    this.cargandoLogin = true;
-    this.enterClicked.emit(this.credentials);
+    this.loginLoading.set(true);
+    let credentials: LogIn = new LogIn(this.username, this.password);
+    this.enterClicked.emit(credentials);
   }
 
   onButtonClick() {
-    if(this.credentials.username && this.credentials.password && !this.cargandoLogin) {
+    if(this.username && this.password && !this.loginLoading()) {
       this.emitToLogin();
     }
   }
 
   onKeyPress(event: KeyboardEvent) {
-    if(event.key === 'Enter' && this.credentials.username && this.credentials.password && !this.cargandoLogin) {
+    if(event.key === 'Enter' && this.username && this.password && !this.loginLoading()) {
       this.emitToLogin();
     }
   }

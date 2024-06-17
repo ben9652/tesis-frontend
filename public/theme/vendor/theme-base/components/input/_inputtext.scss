@@ -57,7 +57,6 @@
 
 .p-input-icon-left > .p-icon-wrapper.p-icon,
 .p-input-icon-left > i:first-of-type {
-    position: absolute;
     left: nth($inputPadding, 2);
     color: $inputIconColor;
 }
@@ -72,9 +71,7 @@
 
 .p-input-icon-right > .p-icon-wrapper,
 .p-input-icon-right > i:last-of-type {
-    position: absolute;
-    top: 30%;
-    right: 8%;
+    right: nth($inputPadding, 2);
     color: $inputIconColor;
 }
 

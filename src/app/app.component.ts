@@ -35,7 +35,7 @@ export class AppComponent {
   }
 
   // Uso de NgxTranslate en archivo TS
-  async ngOnInit(): Promise<void> {
+  ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
       if(typeof window !== "undefined") {
         this.viewportHeight = window.innerHeight;
