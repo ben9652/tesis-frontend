@@ -1,7 +1,11 @@
 <div class="header">
-    <div class="blank-space"></div>
+    <div class="menu-button">
+        <div class="menu-icon" (click)="menuVisible.set(!menuVisible())">
+            <i class="fas fa-bars fa-xl"></i>
+        </div>
+    </div>
     <div class="header-text">{{ 'TITLE' | translate }}</div>
-    <div class="button">
+    <div class="user-button">
         <div class="user-icon" (click)="op.toggle($event)">
             <i class="fas fa-user fa-xl"></i>
         </div>

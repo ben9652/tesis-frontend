@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal, WritableSignal } from '@angular/core';
 import { HomeComponent } from '../home/home.component';
 import { RawMaterialsCatalogComponent } from '../raw-materials-catalog/raw-materials-catalog.component';
 import { ProductsCatalogComponent } from '../products-catalog/products-catalog.component';
@@ -15,6 +15,7 @@ import { SalesComponent } from '../sales/sales.component';
 import { PanelMenuModule } from 'primeng/panelmenu';
 import { MenuItem } from 'primeng/api';
 import { SidebarModule } from 'primeng/sidebar';
+import { AvatarModule } from 'primeng/avatar';
 
 import { TranslateService } from '@ngx-translate/core';
 import { MainBannerComponent } from './main-banner/main-banner.component';
@@ -53,7 +54,8 @@ export enum ActiveSection {
     StorageComponent,
     SalesComponent,
     PanelMenuModule,
-    SidebarModule
+    SidebarModule,
+    AvatarModule
   ],
   templateUrl: './main-section.component.html',
   styleUrl: './main-section.component.scss'
@@ -63,8 +65,7 @@ export class MainSectionComponent {
   activeSectionEnum = ActiveSection.HOME;
   
   sideMenu: MenuItem[] = [];
-
-  selectedNode: MenuItem = {};
+  menuOpened: WritableSignal<boolean> = signal(false);
 
   constructor(
     private translateService: TranslateService,

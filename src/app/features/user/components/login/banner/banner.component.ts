@@ -5,7 +5,9 @@ import { CustomTranslateService } from '../../../../../core/services/custom-tran
 @Component({
   selector: 'app-banner',
   standalone: true,
-  imports: [TranslateModule],
+  imports: [
+    TranslateModule
+  ],
   templateUrl: './banner.component.html',
   styleUrl: './banner.component.scss'
 })

@@ -4,14 +4,30 @@
     display: grid;
     grid-template-columns: 10% 80% 10%;
     background-color: $primaryColor;
+    position: fixed;
     color: $secondaryColor;
-    z-index: 1;
     width: 100%;
+    height: 15vh;
+}
+
+.menu-button {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 2rem;
+}
+
+.menu-icon {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    cursor: pointer;
 }
 
 .header-text {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-family: 'Tomatoes', sans-serif;
     font-size: xx-large;
 
@@ -19,17 +35,18 @@
     -webkit-user-select: none;
 }
 
-.button {
+.user-button {
     display: flex;
     justify-content: right;
     align-items: center;
-    padding: 1rem;
+    padding: 2rem;
 }
 
 .user-icon {
     display: flex;
     align-items: center;
     height: 100%;
+    cursor: pointer;
 }
 
 ::ng-deep .p-overlaypanel .p-overlaypanel-content {
