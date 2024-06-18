@@ -13,6 +13,7 @@ import { ProductsLabourComponent } from './features/sections/components/products
 import { AccountingComponent } from './features/sections/components/accounting/accounting.component';
 import { SalesComponent } from './features/sections/components/sales/sales.component';
 import { MainSectionComponent } from './features/sections/components/main-section/main-section.component';
+import { StorageComponent } from './features/sections/components/storage/storage.component';
 
 export const routes: Routes = [
     {
@@ -27,10 +28,14 @@ export const routes: Routes = [
     },
     {
         path: 'sections',
-        pathMatch: 'full',
         canActivate: [AuthGuard],
         component: MainSectionComponent,
         children: [
+            {
+                path: '',
+                redirectTo: 'home',
+                pathMatch: 'full'
+            },
             {
                 path: 'home',
                 component: HomeComponent
@@ -70,6 +75,10 @@ export const routes: Routes = [
             {
                 path: 'accounting-book',
                 component: AccountingComponent
+            },
+            {
+                path: 'storage',
+                component: StorageComponent
             },
             {
                 path: 'sales',

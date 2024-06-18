@@ -20,6 +20,9 @@ header {
 .header-text {
     font-family: 'Tomatoes', sans-serif;
     font-size: xx-large;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 @media screen and (max-width: 500px) {

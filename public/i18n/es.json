@@ -10,14 +10,26 @@
             "BUTTON": "Entrar"
         },
         "SIDEBAR": {
-            "HOME": "Inicio",
-            "CATALOGS": "Catálogos",
-            "PARTNERS": "Socios",
-            "PURCHASES": "Compras",
-            "MANUFACTURE": "Mano de obra",
-            "ACCOUNTING": "Contabilidad",
-            "STORE": "Almacén",
-            "SALES": "Ventas"
+            "ROOT": {
+                "HOME": "Inicio",
+                "CATALOGS": "Catálogos",
+                "PARTNERS": "Socios",
+                "PURCHASES": "Compras",
+                "MANUFACTURE": "Mano de obra",
+                "ACCOUNTING": "Contabilidad",
+                "STORE": "Almacén",
+                "SALES": "Ventas"
+            },
+            "LEVEL1": {
+                "RAW_MATERIALS": "Materias primas",
+                "PRODUCTS": "Productos",
+                "PROVIDERS": "Proveedores",
+                "BRANCHES": "Sucursales"
+            }
         }
+    },
+    "BANNER": {
+        "EDIT_PROFILE": "Editar perfifl",
+        "LOGOUT": "Cerrar sesión"
     }
 }
