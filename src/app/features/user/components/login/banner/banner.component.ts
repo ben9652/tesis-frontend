@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { CustomTranslateService } from '../../../../../core/services/custom-translate.service';
 
 @Component({
   selector: 'app-banner',
@@ -13,7 +12,7 @@ import { CustomTranslateService } from '../../../../../core/services/custom-tran
 })
 export class BannerComponent {
   constructor(
-    public translateService: CustomTranslateService
+    
   ) {
 
   }
