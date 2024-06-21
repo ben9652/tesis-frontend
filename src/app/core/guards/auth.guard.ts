@@ -11,7 +11,6 @@ export const LoggedInGuard: CanActivateFn = (
   const router = inject(Router);
 
   const isAuthenticated: boolean = auth.checkAuthentication();
-
   if(isAuthenticated) {
     router.navigate(['/']);
     return false;

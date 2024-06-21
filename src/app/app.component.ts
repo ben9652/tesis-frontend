@@ -39,7 +39,6 @@ export class AppComponent {
     if (isPlatformBrowser(this.platformId)) {
       if(typeof window !== "undefined") {
         this.viewportHeight = window.innerHeight;
-        console.log(window.innerHeight);
       }
     }
   }

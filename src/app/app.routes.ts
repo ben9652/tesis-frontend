@@ -18,8 +18,9 @@ import { StorageComponent } from './features/sections/components/storage/storage
 export const routes: Routes = [
     {
         path: 'login',
-        // canActivate: [LoggedInGuard],
-        component: LoginComponent
+        canActivate: [LoggedInGuard],
+        component: LoginComponent,
+        pathMatch: 'full'
     },
     {
         path: '',
@@ -28,7 +29,7 @@ export const routes: Routes = [
     },
     {
         path: 'sections',
-        // canActivate: [AuthGuard],
+        canActivate: [AuthGuard],
         component: MainSectionComponent,
         children: [
             {

@@ -12,6 +12,13 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
+  // Ya que no se puede usar el objeto sessionStorage fuera del navegador,
+  // me espero a que se inicialice todo para recién asignarle este objeto
+  // a este atributo y así asegurarme de que se esté usando el objeto con
+  // el navegador ya inicializado con todos los objetos propios de este
+  // ya definidos.
+  public ownSessionStorage?: Storage;
+  
   urlBase: string;
   httpOptions: any;
 
@@ -34,9 +41,15 @@ export class AuthService {
       }),
       responseType: 'json'
     };
-    // afterRender(() => {
-    //   this.isAuthenticated = sessionStorage.getItem('authenticated') === 'true' ? true : false;
-    // });
+    
+    afterRender(() => {
+      if(typeof sessionStorage !== 'undefined') {
+        this.ownSessionStorage = sessionStorage;
+      }
+      this.isAuthenticated = sessionStorage.getItem('authenticated') === 'true' ? true : false;
+      this.userData = JSON.parse(this.ownSessionStorage?.getItem('user') || '{}');
+      this.startTimeout();
+    });
   }
 
   private authenticate(userObj: LogIn): Observable<any> {
@@ -62,10 +75,8 @@ export class AuthService {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
     }
-    // afterRender(() => {
-    //   sessionStorage.removeItem('user')
-    //   sessionStorage.setItem('authenticated', 'false');
-    // });
+    this.ownSessionStorage?.removeItem('user');
+    this.ownSessionStorage?.setItem('authenticated', 'false');
   }
   
   async login(userObj: LogIn): Promise<ApiMessage> {
@@ -81,6 +92,8 @@ export class AuthService {
         if(typeof response.mensaje === 'object') {
           this.userData = response.mensaje;
           console.log(this.userData);
+          this.ownSessionStorage?.setItem('authenticated', 'true');
+          this.ownSessionStorage?.setItem('user', JSON.stringify(this.userData));
         }
         this.isAuthenticated = true;
         this.resetTimeout();
@@ -104,6 +117,8 @@ export class AuthService {
     this.userData = undefined;
     this.router.navigate(['/login']);
     this.clearTimeout();
+    this.ownSessionStorage?.removeItem('authenticated');
+    this.ownSessionStorage?.removeItem('user');
   }
 
   checkAuthentication(): boolean {

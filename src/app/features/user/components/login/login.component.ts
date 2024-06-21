@@ -32,7 +32,11 @@ export class LoginComponent {
     private messageService: MessageService,
     private activatedRoute: ActivatedRoute
   ) {
-
+     afterRender(() => {
+      if(sessionStorage.getItem('authenticated') === 'true') {
+        router.navigate(['sections']);
+      }
+     })
   }
   
   ngOnInit(): void {
