@@ -25,7 +25,7 @@ export class AuthService {
   private isAuthenticated: boolean = false;
   private timeoutId: number | null | NodeJS.Timeout = null;
 
-  public userData?: User;
+  public token: string | null = null;
   
   constructor(
     private http: HttpClient,
@@ -46,15 +46,27 @@ export class AuthService {
       if(typeof sessionStorage !== 'undefined') {
         this.ownSessionStorage = sessionStorage;
       }
-      this.isAuthenticated = sessionStorage.getItem('authenticated') === 'true' ? true : false;
-      this.userData = JSON.parse(this.ownSessionStorage?.getItem('user') || '{}');
+      this.isAuthenticated = sessionStorage.getItem('authenticated') ? true : false;
+      this.token = sessionStorage.getItem('token');
+      this.httpOptions.headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Max-Age': '86400',
+        'x-cache': 'true',
+        'Authorization': `Bearer ${this.token}`
+      });
+
       this.startTimeout();
     });
   }
 
   private authenticate(userObj: LogIn): Observable<any> {
-    const apiUrl = this.urlBase + 'Autenticar?' + 'username=' + userObj.username + '&password=' + userObj.password;
-    return this.http.get<any>(apiUrl, this.httpOptions);
+    const apiUrl = this.urlBase;
+    return this.http.post<ApiMessage>(apiUrl, userObj, this.httpOptions);
+  }
+
+  getUser(): Observable<any> {
+    const apiUrl = this.urlBase;
+    return this.http.get<User>(apiUrl, this.httpOptions);
   }
 
   private startTimeout(): void {
@@ -75,8 +87,8 @@ export class AuthService {
       clearTimeout(this.timeoutId);
       this.timeoutId = null;
     }
-    this.ownSessionStorage?.removeItem('user');
-    this.ownSessionStorage?.setItem('authenticated', 'false');
+    this.ownSessionStorage?.removeItem('token');
+    this.ownSessionStorage?.removeItem('authenticated');
   }
   
   async login(userObj: LogIn): Promise<ApiMessage> {
@@ -86,21 +98,24 @@ export class AuthService {
     try {
       response = await firstValueFrom(this.authenticate(userObj));
       if(response.error) {
-        this.startTimeout();
+        this.clearTimeout();
       }
       else {
-        if(typeof response.mensaje === 'object') {
-          this.userData = response.mensaje;
-          console.log(this.userData);
-          this.ownSessionStorage?.setItem('authenticated', 'true');
-          this.ownSessionStorage?.setItem('user', JSON.stringify(this.userData));
-        }
+        this.ownSessionStorage?.setItem('token', response.mensaje);
+        this.token = response.mensaje;
+        this.httpOptions.headers = new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Access-Control-Max-Age': '86400',
+          'x-cache': 'true',
+          'Authorization': `Bearer ${this.token}`
+        });
+        this.ownSessionStorage?.setItem('authenticated', 'true');
         this.isAuthenticated = true;
         this.resetTimeout();
       }
     }
     catch(error) {
-      this.startTimeout();
+      this.clearTimeout();
       response = {
         mensaje: 'Ocurrió un error durante el inicio de sesión.',
         error: true
@@ -114,10 +129,10 @@ export class AuthService {
   logout(): void {
     // Lógica para cerrar la sesión y establecer isAuthenticated en false
     this.isAuthenticated = false;
-    this.userData = undefined;
     this.router.navigate(['/login']);
     this.clearTimeout();
     this.ownSessionStorage?.removeItem('authenticated');
+    this.ownSessionStorage?.removeItem('token');
     this.ownSessionStorage?.removeItem('user');
   }
 
