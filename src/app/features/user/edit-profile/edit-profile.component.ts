@@ -15,6 +15,7 @@ import { PatchObject } from '../../../core/models/patchObj.entities';
 import { ApiMessage } from '../../../core/models/apimessage.entities';
 import { CommonModule } from '@angular/common';
 import { catchError, map, Observable, of } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-profile',
@@ -89,12 +90,12 @@ export class EditProfileComponent {
           
           return true;
         }),
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           this.messageService.add({
             severity: 'error',
             // TODO: Agregar al translate estos mensajes y hacer uso de ellos
             summary: 'Denegado',
-            detail: error
+            detail: 'No estás autorizado a realizar esta acción'
           });
 
           this.username = '';
@@ -123,21 +124,27 @@ export class EditProfileComponent {
         new PatchObject('replace', 'username', this.username)
       );
     }
-    if(this.currentPassword && this.newPassword && this.confirmedPassword) {
-      if(this.newPassword !== this.confirmedPassword) {
-        this.messageService.add({
-          severity: 'warn',
-          // TODO: Agregar al translate estos mensajes y hacer uso de ellos
-          summary: 'Campos inválidos',
-          detail: 'Las contraseñas no coinciden'
-        });
-        this.isLoading = false;
-        return;
+    if(this.currentPassword || this.newPassword || this.confirmedPassword) {
+      if(this.currentPassword && this.newPassword && this.confirmedPassword) {
+        if(this.newPassword !== this.confirmedPassword) {
+          this.messageService.add({
+            severity: 'warn',
+            // TODO: Agregar al translate estos mensajes y hacer uso de ellos
+            summary: 'Campos inválidos',
+            detail: 'Las contraseñas no coinciden'
+          });
+          this.isLoading = false;
+          return;
+        }
+        else {
+          attributesToChange.push(
+            new PatchObject('replace', 'password', this.newPassword)
+          );
+        }
       }
       else {
-        attributesToChange.push(
-          new PatchObject('replace', 'password', this.newPassword)
-        );
+        this.isLoading = false;
+        return;
       }
     }
 
